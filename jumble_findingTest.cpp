@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
 #include <ctime>
-#include "jumble_20iagd.h"
+#include "jumble_20iagd.cpp"
 using namespace std;
 
 void showJumble(const charArrayPtr* jumble, const int size) {
@@ -46,8 +46,6 @@ void playGame() {
 	}
 	
 	showJumble(jp->getJumble(), jp->getSize());
-	delete jp;
-	jp = nullptr;
 
 }
 

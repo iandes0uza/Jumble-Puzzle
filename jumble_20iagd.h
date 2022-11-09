@@ -2,13 +2,14 @@
 #include <string>
 using namespace std;
 
+
 typedef char* charArrayPtr;
 
 class JumblePuzzle
 {
     public:
             //*************************** DESTRUCTOR ***************************
-            ~JumblePuzzle();
+        //     ~JumblePuzzle();
 
             //************************* INITIALIZATION *************************
             JumblePuzzle(const string& hide, const string& diff);
@@ -46,7 +47,7 @@ class BadJumbleException
 {
     public:
             BadJumbleException(const string& message);
-            string what();
+            string what() const;
 
     private:
             string message;

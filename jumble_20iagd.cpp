@@ -2,20 +2,20 @@
 #include <string>
 #include <iostream>
 #include <ctime>
+#include <cctype>
+#include "jumble_20iagd.h"
 using namespace std;
 
 
-#include "jumble_20iagd.h"
 
 JumblePuzzle::JumblePuzzle(const string& hide, const string& diff)
 {
-    diff.tolower();
     size = hide.length();
     if (size < LOWER_LIMIT || size > UPPER_LIMIT) 
         throw BadJumbleException("Invalid word length, please refer to game details.\n");
     if (diff == "easy") size *= 2;
-    else if (strcmp(diff, "medium") == 0) size *= 3;
-    else if (strcmp(diff, "hard") == 0) size *= 4;
+    else if (diff == "medium") size *= 3;
+    else if (diff == "hard") size *= 4;
     else throw BadJumbleException("Invalid difficulty, must be \"Easy\", \"Medium\", \"Hard\"\n");
     jumblePuzzle = new char* [size];
 
@@ -30,43 +30,22 @@ JumblePuzzle::JumblePuzzle(const string& hide, const string& diff)
     colPos = rand() % size;
     jumblePuzzle[rowPos][colPos] = hide[0];
 
-    //prep jumble puzzle for word entry ***************************** test this on the side for effeciency
-    // while(true)
-    // {
-    //     //determine the direction for the hidden word
-    //     char dirPicked = dir[rand()%4];
-
-    //     //check directions for room. If no space, reversed direction will fit. Break loop once corrected
-    //     if (dirPicked == 'n') 
-    //     {
-    //         if ((rowPos - (hide.length() - 1)) < 0) dirPicked = 's';
-    //         break;
-    //     }
-    //     if (dirPicked == 'e') 
-    //     {
-    //         if ((colPos + (hide.length() - 1)) > size) dirPicked = 'w';
-    //         break;
-    //     }
-    //     if (dirPicked == 's') 
-    //     {
-    //         if ((rowPos + (hide.length() - 1)) > size) dirPicked = 'n';
-    //         break;
-    //     }
-    //     if (dirPicked == 'w') 
-    //     {
-    //         if ((colPos - (hide.length() - 1)) < 0) dirPicked = 'e';
-    //         break;
-    //     }
-    // }
-
     //randomly chooses a direction to place the word in
     char dirPicked = dir[rand()%4];
 
     //check directions for room. If no space, reversed direction will fit. Break loop once corrected
-    if (dirPicked == 'n') if ((rowPos - (hide.length() - 1)) < 0) dirPicked = 's';
-    else if (dirPicked == 'e') if ((colPos + (hide.length() - 1)) > size) dirPicked = 'w';
-    else if (dirPicked == 's') if ((rowPos + (hide.length() - 1)) > size) dirPicked = 'n';
-    else if ((colPos - (hide.length() - 1)) < 0) dirPicked = 'e';
+    if (dirPicked == 'n') {
+        if ((rowPos - (hide.length() - 1)) < 0) dirPicked = 's';
+    }
+    else if (dirPicked == 'e') {
+        if ((colPos + (hide.length() - 1)) > size-1) dirPicked = 'w';
+    }
+    else if (dirPicked == 's'){
+        if ((rowPos + (hide.length() - 1)) > size-1) dirPicked = 'n';
+    }
+    else { 
+        if ((colPos - (hide.length() - 1)) < 0) dirPicked = 'e';
+    }
 
     //places word in desired direction
     for (int x = 1; x < hide.length(); x++)
@@ -79,5 +58,26 @@ JumblePuzzle::JumblePuzzle(const string& hide, const string& diff)
 
         //place word
         jumblePuzzle[rowPos][colPos] = hide[x];
+
     }
 }
+
+int JumblePuzzle::getSize() const
+{
+    return size;
+}
+
+charArrayPtr* JumblePuzzle::getJumble() const
+{
+
+    //initialize the new jumblePuzzle
+    charArrayPtr* newPuzzle = new char* [size];
+    for (int i = 0; i < size; i++) newPuzzle[i] = new char [size];
+
+    //replace contents
+    for (int i = 0; i < size; i++) for (int j = 0; j < size; j++) newPuzzle[i][j] = jumblePuzzle[i][j];
+    return newPuzzle;
+}
+
+BadJumbleException::BadJumbleException(const string& m) : message(m){ }
+string BadJumbleException::what() const { return message; }
