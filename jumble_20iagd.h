@@ -9,7 +9,7 @@ class JumblePuzzle
 {
     public:
             //*************************** DESTRUCTOR ***************************
-        //     ~JumblePuzzle();
+            ~JumblePuzzle();
 
             //************************* INITIALIZATION *************************
             JumblePuzzle(const string& hide, const string& diff);
@@ -30,8 +30,9 @@ class JumblePuzzle
             int size;
             int rowPos;
             int colPos;
-            int LOWER_LIMIT = 3;
-            int UPPER_LIMIT = 10;
+            char direction;
+            int LOWER_LIMIT;
+            int UPPER_LIMIT;
             charArrayPtr* jumblePuzzle;
             const char* alphabet = "abcdefghijklmnopqrstuvwxyz";
             const char* dir = "nesw";
