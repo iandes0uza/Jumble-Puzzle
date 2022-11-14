@@ -147,11 +147,53 @@ void testJumble() {
 	// even if you don't run out of memory.
 	// Of course you won't get a memory leak error if you are using the heap properly,
 	// and the program will terminate normally!
-	int loopLimit = 1000;
+	int loopLimit = 100;
 	for (int i = 0; i < loopLimit; i++)
 		JumblePuzzle jp("HIDDENWORD", "hard");
 	cout << "\nPassed memory leak test!" << endl;
 
+	loopLimit = 1000;
+	for (int i = 0; i < loopLimit; i++)
+		JumblePuzzle jp("HIDDENWORD", "hard");
+	cout << "\nPassed memory leak test!" << endl;
+
+	loopLimit = 10000;
+	//An issue with my computer prevents me from running this multiple times
+	//
+	for (int i = 0; i < loopLimit; i++)
+		JumblePuzzle jp("HIDDENWORD", "hard");
+	cout << "\nPassed memory leak test!" << endl;
+
+	//Test exception classes/possible errors
+	cout << "Testing BadJumbleException class:" << endl;
+	try {
+		cout << "Trying invalid difficulty..." <<endl;
+		JumblePuzzle tester("hidden", "not valid difficulty");
+	} catch (const BadJumbleException& e) {
+		cerr << e.what();
+		cout << "***********Error succesfully caught!" <<endl;
+	}
+	try {
+		cout << "Trying invalid word (large)..." <<endl;
+		JumblePuzzle tester("over thirteen characters", "easy");
+	} catch (const BadJumbleException& e) {
+		cerr << e.what();
+		cout << "***********Error succesfully caught!" <<endl;
+	}
+	try {
+		cout << "Trying invalid word (small)..." <<endl;
+		JumblePuzzle tester("2c", "easy");
+	} catch (const BadJumbleException& e) {
+		cerr << e.what();
+		cout << "***********Error succesfully caught!" <<endl;
+	}
+
+	//Testing accessor functions from jp1
+	cout<< "Size of array should be 5*2=10, :"<<jp1.getSize() << endl;
+	showJumble(jp1.getJumble(), jp1.getSize());
+	cout << "The word Hello should be hidden at column "<< jp1.getColPos() << endl;
+	cout << "It should be hidden at row "<< jp1.getRowPos() << endl;
+	cout << "In this direction: " << jp1.getDirection() << endl;
 } // end testJumble
 
 int main() {
@@ -159,7 +201,7 @@ int main() {
 	testJumble();
 
 	// Make sure your class works before you play the game!
-	//playGame();
+	playGame();
 
 	return 0;
 } // end main

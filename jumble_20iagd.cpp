@@ -9,7 +9,6 @@ using namespace std;
 
 JumblePuzzle::JumblePuzzle(const string& hide, const string& diff)
 {
-
     LOWER_LIMIT = 3;
     UPPER_LIMIT = 10;
     size = hide.length();
@@ -51,7 +50,7 @@ JumblePuzzle::JumblePuzzle(const string& hide, const string& diff)
     else{ if ((col - (word_size - 1)) < 0) direction = 'e';}
 
     //debug
-    //printf("Size: %d, Word Size: %d, rowPos: %d, colPos: %d, dir: %c\n", size, hide.length(), rowPos, colPos, dirPicked);
+    // printf("Size: %d, Word Size: %d, rowPos: %d, colPos: %d, dir: %c\n", size, hide.length(), rowPos, colPos, direction);
 
     //places word in desired direction
     for (int x = 1; x < word_size; x++)
@@ -78,7 +77,15 @@ JumblePuzzle::JumblePuzzle(JumblePuzzle& puzzle)
 
 JumblePuzzle::~JumblePuzzle() 
 {
-    
+    for (int i = 0; i < size; i++){
+        delete[] jumblePuzzle[i]; //delete 2nd dimension of array
+    }
+    delete[] jumblePuzzle; //delete 1st dimension of array
+    rowPos = NULL;
+    colPos = NULL;
+    size = NULL;
+
+    jumblePuzzle = nullptr;
 }
 
 int JumblePuzzle::getSize() const
